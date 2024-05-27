@@ -83,7 +83,7 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
     const textWithImages = replacePhotos(text);
 
     const processor = unified()
-      .use(markdown)
+      .use(markdown as any)
       .use(docx, {
         output: "blob",
         imageResolver: fetchImage,

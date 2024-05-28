@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { unified } from "unified";
 import markdown from "remark-parse";
 import docx from "remark-docx";
+import remarkHtml from "remark-html";
 
 type GenerateReportProps = {
   images: string[];
@@ -69,10 +70,13 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
     });
   };
 
-  function replacePhotos(text: string) {
+  function replacePhotos(text: string, html: boolean = false) {
     return text.replace(/\[photo_(\d+)\]/g, (match, number) => {
       if (number && images && images[number - 1]) {
         const imageURL = images[number - 1];
+        if (html) {
+          return `<img src="${imageURL}" alt="photo_${number}" width="200" height="200" />`;
+        }
         return `![photo_${number}](${imageURL})`;
       }
       return text;
@@ -101,6 +105,40 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
     }
   };
 
+  const generateHTML = async (text: string) => {
+    //const processor = unified().use(markdown).use(html); // Use remark-html to convert Markdown to HTML
+
+    const processor = unified().use(markdown).use(remarkHtml);
+
+    try {
+      const html = await processor.process(text);
+      return html.value;
+    } catch (error) {
+      console.error("Error generating HTML:", error);
+      return null;
+    }
+  };
+
+  const ResponseHTML = ({ response }: { response: string }) => {
+    console.log("response", response);
+
+    const [html, setHtml] = useState<string | null>(null);
+
+    useEffect(() => {
+      generateHTML(response)
+        .then((htmlResult) => {
+          const withPhoto = replacePhotos(htmlResult as string, true);
+          setHtml(withPhoto);
+        })
+        .catch((error) => {
+          console.error("Error generating HTML:", error);
+          setHtml(null);
+        });
+    }, [response]);
+
+    return html ? <div dangerouslySetInnerHTML={{ __html: html }} /> : null;
+  };
+
   return (
     <div className="image-container flex flex-col items-center">
       {images.length > 0 && (
@@ -111,7 +149,7 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
           2. Generate report
         </button>
       )}
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <div className="m-3">Loading...</div>}
 
       {response && (
         <button
@@ -124,7 +162,7 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
 
       {response && (
         <div className="p-2 overflow-auto my-4 border border-blue-100">
-          {response}
+          <ResponseHTML response={response} />
         </div>
       )}
     </div>

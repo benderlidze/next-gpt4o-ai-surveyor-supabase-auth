@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import { unified } from "unified";
 import markdown from "remark-parse";
@@ -12,7 +12,13 @@ type GenerateReportProps = {
 
 export const GenerateReport = ({ images }: GenerateReportProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [response, setResponse] = useState<string>();
+  const [response, setResponse] = useState<string | null>();
+
+  useEffect(() => {
+    if (images.length > 0) {
+      setResponse(null);
+    }
+  }, [images]);
 
   const handleSubmitImages = () => {
     console.log("base64Strings", images);
@@ -107,9 +113,7 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
 
   const generateHTML = async (text: string) => {
     //const processor = unified().use(markdown).use(html); // Use remark-html to convert Markdown to HTML
-
     const processor = unified().use(markdown).use(remarkHtml);
-
     try {
       const html = await processor.process(text);
       return html.value;
@@ -120,8 +124,6 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
   };
 
   const ResponseHTML = ({ response }: { response: string }) => {
-    console.log("response", response);
-
     const [html, setHtml] = useState<string | null>(null);
 
     useEffect(() => {
@@ -139,9 +141,13 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
     return html ? <div dangerouslySetInnerHTML={{ __html: html }} /> : null;
   };
 
+  if (!images || images.length === 0) {
+    return null;
+  }
+
   return (
     <div className="image-container flex flex-col items-center">
-      {images.length > 0 && (
+      {images.length > 0 && !response && (
         <button
           onClick={handleSubmitImages} // Call handleClick on button click
           className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
@@ -154,9 +160,9 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
       {response && (
         <button
           onClick={() => generateDoc(response)}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
         >
-          3. Download doc report
+          3. Download report
         </button>
       )}
 

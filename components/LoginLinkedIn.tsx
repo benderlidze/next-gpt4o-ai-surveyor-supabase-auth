@@ -2,7 +2,7 @@
 import { createClient } from "@/utils/supabase/client";
 
 export const LoginLinkedIn = () => {
-  const loginWithGitHub = () => {
+  const loginWithLinkedID = () => {
     const supabase = createClient();
     supabase.auth.signInWithOAuth({
       provider: "linkedin_oidc",
@@ -14,7 +14,7 @@ export const LoginLinkedIn = () => {
 
   return (
     <button
-      onClick={loginWithGitHub}
+      onClick={loginWithLinkedID}
       className="bg-black text-white px-4 py-2 rounded"
     >
       Login with LinkedIn

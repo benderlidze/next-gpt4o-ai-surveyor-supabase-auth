@@ -25,7 +25,9 @@ export default async function ProtectedPage() {
         </div> */}
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-            <div />
+            <div>
+              <img src="images/logo.png" alt="logo" className="max-h-12" />
+            </div>
             <AuthButton />
           </div>
         </nav>
@@ -36,8 +38,22 @@ export default async function ProtectedPage() {
         <Report />
       </div>
 
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-        <p>Powered by </p>
+      <footer className="align-middle flex-row w-full border-t p-4 flex justify-between text-xs">
+        <div className="flex-1">
+          Built by the team behind{" "}
+          <a
+            className="font-bold"
+            target="_blank"
+            href="https://www.therequirementlist.com/"
+          >
+            The Requirement List
+          </a>
+        </div>
+        <div className="flex-1 flex items-center text-center flex-col ">
+          <div>Trusted by the leading property consultancies in the UK</div>
+          <img src="images/logos.png" alt="" className="w-3/6" />
+        </div>
+        <div></div>
       </footer>
     </div>
   );

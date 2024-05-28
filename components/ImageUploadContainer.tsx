@@ -50,6 +50,10 @@ export const ImageUploadContainer = ({
     fileInputRef.current?.click(); // Use ref to click the file input
   };
 
+  const handleReset = () => {
+    setImages([]);
+  };
+
   return (
     <div className="w-full">
       <div
@@ -60,12 +64,20 @@ export const ImageUploadContainer = ({
       >
         <p className="mb-2 text-center">Drag & drop images here</p>
         <p className="text-center">or</p>
-        <button
-          onClick={handleClick} // Call handleClick on button click
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-        >
-          1. Upload Image
-        </button>
+        <div className="flex flex-row items-center justify-center gap-3">
+          <button
+            onClick={handleClick} // Call handleClick on button click
+            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            1. Upload Image
+          </button>
+          <button
+            onClick={handleReset} // Call handleClick on button click
+            className="mt-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            Reset
+          </button>
+        </div>
         <input
           type="file"
           ref={fileInputRef} // Assign ref to the input

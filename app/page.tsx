@@ -22,16 +22,19 @@ export default async function Index() {
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
         <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-          <DeployButton />
+          <div className="flex gap-6"></div>
           {isSupabaseConnected && <AuthButton />}
         </div>
       </nav>
 
-      <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
+      <div className="animate-in flex-1 flex flex-col gap-10 opacity-0 max-w-4xl px-3">
         <Header />
         <main className="flex-1 flex flex-col gap-6">
+          <div className="flex flex-col ">
+            <GenerateReportButton />
+          </div>
           <div className="flex flex-row gap-6">
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center">
               Uploaded image
               <img
                 src="images/example.png"
@@ -39,7 +42,7 @@ export default async function Index() {
                 className="border rounded-lg"
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center">
               Instant AI report
               <img
                 src="images/report.gif"
@@ -47,10 +50,6 @@ export default async function Index() {
                 className="border rounded-lg"
               />
             </div>
-          </div>
-
-          <div className="flex flex-col ">
-            <GenerateReportButton />
           </div>
         </main>
       </div>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, DragEvent, ChangeEvent } from "react";
+import React, { useRef, DragEvent, ChangeEvent, useState } from "react";
 
 type ImageUploadContainerProps = {
   images: string[];
@@ -11,6 +11,7 @@ export const ImageUploadContainer = ({
   setImages,
 }: ImageUploadContainerProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null); // Create a ref for the file input
+  const [error, setError] = useState<string>("");
 
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -19,21 +20,43 @@ export const ImageUploadContainer = ({
   };
 
   const handleFiles = (files: FileList) => {
+    console.log("images", images);
+    console.log("files", files);
+
+    if (images.length >= 4) {
+      setError("Max number of images reached(4).");
+      return;
+    }
+
+    if (images.length + files.length >= 4) {
+      setError("Max number of images reached(4).");
+    }
+
+    const maxFiles = 4;
     const newImages: string[] = [];
-    Array.from(files).forEach((file) => {
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          if (event.target?.result) {
-            newImages.push(event.target.result as string);
-            if (newImages.length === files.length) {
-              setImages((prevImages) => [...prevImages, ...newImages]);
+    const maxFilesImages =
+      files.length + images.length > maxFiles
+        ? files.length - images.length
+        : files.length;
+
+    console.log("maxImages", maxFilesImages);
+
+    Array.from(files)
+      .slice(0, maxFilesImages)
+      .forEach((file) => {
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            if (event.target?.result) {
+              newImages.push(event.target.result as string);
+              if (newImages.length === maxFilesImages) {
+                setImages((prevImages) => [...prevImages, ...newImages]);
+              }
             }
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+          };
+          reader.readAsDataURL(file);
+        }
+      });
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +75,7 @@ export const ImageUploadContainer = ({
 
   const handleReset = () => {
     setImages([]);
+    setError("");
   };
 
   return (
@@ -82,10 +106,12 @@ export const ImageUploadContainer = ({
           type="file"
           ref={fileInputRef} // Assign ref to the input
           className="hidden"
-          accept="image/*"
+          accept="image/png, image/jpeg, image/webp, image/bmp" // Allow user to select
           multiple
           onChange={handleInputChange}
         />
+
+        {error && <p className="mt-2 text-red-600">{error}</p>}
       </div>
       <div
         id="imagePreview"

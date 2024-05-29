@@ -36,7 +36,7 @@ export const ImageUploadContainer = ({
     const newImages: string[] = [];
     const maxFilesImages =
       files.length + images.length > maxFiles
-        ? files.length - images.length
+        ? maxFiles - images.length
         : files.length;
 
     console.log("maxImages", maxFilesImages);

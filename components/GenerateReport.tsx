@@ -5,6 +5,7 @@ import { unified } from "unified";
 import markdown from "remark-parse";
 import docx from "remark-docx";
 import remarkHtml from "remark-html";
+import Resizer from "react-image-file-resizer";
 
 type GenerateReportProps = {
   images: string[];
@@ -20,7 +21,7 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
     }
   }, [images]);
 
-  const handleSubmitImages = () => {
+  const handleSubmitImages = async () => {
     console.log("base64Strings", images);
 
     if (images.length === 0) {
@@ -31,12 +32,51 @@ export const GenerateReport = ({ images }: GenerateReportProps) => {
     setIsLoading(true);
     setResponse("");
 
+    const resizedImages = async () => {
+      try {
+        const resized = await Promise.all(
+          images.map(async (image) => {
+            try {
+              const resizedImage = await new Promise(async (resolve) => {
+                const blob = await fetch(image).then((r) => r.blob());
+                Resizer.imageFileResizer(
+                  blob,
+                  300,
+                  300,
+                  "JPEG",
+                  100,
+                  0,
+                  (uri) => {
+                    resolve(uri);
+                  },
+                  "base64"
+                );
+              });
+              return resizedImage;
+            } catch (error) {
+              console.error("Error resizing image:", error);
+              return null; // or handle the error as needed
+            }
+          })
+        );
+        return resized.filter((image) => image !== null);
+      } catch (error) {
+        console.error("Error resizing images:", error);
+        return [];
+      }
+    };
+
+    const resimages = await resizedImages();
+
+    console.log("images", images);
+    console.log("resimages", resimages);
+
     fetch("/api/gpt", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ images: images }),
+      body: JSON.stringify({ images: resimages }),
     })
       .then((response) => response.json())
       .then((data) => {

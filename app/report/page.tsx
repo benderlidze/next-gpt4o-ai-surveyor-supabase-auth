@@ -16,10 +16,14 @@ export default async function ProtectedPage() {
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
+    <div className="flex-1 w-full flex flex-col gap-10 items-center">
       <Nav />
       <div className=" flex-1 flex flex-col  max-w-4xl px-3">
-        <Header />
+        <div className="text-center">
+          Upload multiple images from your property inspection and let AI
+          provide observations, spot potential problems and give its
+          recommendations.
+        </div>
         <Report />
       </div>
     </div>

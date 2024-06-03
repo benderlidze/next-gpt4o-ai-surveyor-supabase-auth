@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-import Header from "@/components/Header";
 import { redirect } from "next/navigation";
 import { Report } from "@/components/Report";
 import { Nav } from "@/components/Nav";
@@ -11,9 +10,9 @@ export default async function ProtectedPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect("/login");
-  }
+  // if (!user) {
+  //   return redirect("/login");
+  // }
 
   return (
     <div className="flex-1 w-full flex flex-col gap-10 items-center">

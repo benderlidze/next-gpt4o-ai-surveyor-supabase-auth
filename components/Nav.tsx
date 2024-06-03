@@ -7,7 +7,7 @@ export const Nav = () => {
         <div>
           <img src="images/logo.png" alt="logo" className="max-h-12" />
         </div>
-        <AuthButton />
+        {/* <AuthButton /> */}
       </div>
     </nav>
   );

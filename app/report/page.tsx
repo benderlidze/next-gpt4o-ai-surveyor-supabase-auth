@@ -2,13 +2,14 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Report } from "@/components/Report";
 import { Nav } from "@/components/Nav";
+import { UpgradeButton } from "@/components/UpgradeButton";
 
 export default async function ProtectedPage() {
-  const supabase = createClient();
+  // const supabase = createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
 
   // if (!user) {
   //   return redirect("/login");
@@ -23,6 +24,9 @@ export default async function ProtectedPage() {
           provide observations, spot potential problems and give its
           recommendations.
         </div>
+    
+        <UpgradeButton />
+
         <Report />
       </div>
     </div>

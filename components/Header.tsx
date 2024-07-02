@@ -10,7 +10,6 @@ export default function Header() {
         Upload multiple images from your property inspection and let AI provide
         observations, spot potential problems and give its recommendations.111
       </div>
-      <UpgradeButton />
     </div>
   );
 }

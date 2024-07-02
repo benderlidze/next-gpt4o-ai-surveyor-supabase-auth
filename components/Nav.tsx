@@ -1,4 +1,5 @@
 import AuthButton from "@/components/AuthButton";
+import { UpgradeButton } from "./UpgradeButton";
 
 export const Nav = () => {
   return (
@@ -8,6 +9,7 @@ export const Nav = () => {
           <img src="images/logo.png" alt="logo" className="max-h-12" />
         </div>
         {/* <AuthButton /> */}
+        <UpgradeButton />
       </div>
     </nav>
   );

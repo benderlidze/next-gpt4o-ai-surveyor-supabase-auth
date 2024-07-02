@@ -24,9 +24,6 @@ export default async function ProtectedPage() {
           provide observations, spot potential problems and give its
           recommendations.
         </div>
-    
-        <UpgradeButton />
-
         <Report />
       </div>
     </div>

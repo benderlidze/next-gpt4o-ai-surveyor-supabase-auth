@@ -8,7 +8,7 @@ export default function Header() {
       </div>
       <div className="text-center">
         Upload multiple images from your property inspection and let AI provide
-        observations, spot potential problems and give its recommendations.111
+        observations, spot potential problems and give its recommendations.
       </div>
     </div>
   );
